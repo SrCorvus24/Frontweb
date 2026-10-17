@@ -10,10 +10,10 @@
       <p v-if="error">{{ error }}</p>
 
       <ion-list>
-        <ion-item v-for="p in productos" :key="p.id">
+        <ion-item v-for="p in productos" :key="p.id" :router-link="'/productos/' + p.id" button>
           <ion-label>
             <h2>{{ p.nombre }}</h2>
-            <p>{{ p.categoria }} · ${{ p.precio }}</p>
+            <p>{{ p.categoria }} · ${{ Number(p.precio).toLocaleString('es-CO') }}</p>
           </ion-label>
         </ion-item>
       </ion-list>
