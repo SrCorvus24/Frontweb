@@ -11,4 +11,9 @@ export const varianteService = {
     const { data } = await api.get(`/reorden/variante/${varianteId}`);
     return data.data;
   },
+
+  async alertas(): Promise<Reorden[]> {
+    const { data } = await api.get('/reorden/alertas');
+    return data.data;
+  },
 };

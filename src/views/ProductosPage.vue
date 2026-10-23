@@ -3,6 +3,9 @@
     <ion-header>
       <ion-toolbar>
         <ion-title>Productos</ion-title>
+        <ion-buttons slot="end">
+          <ion-button router-link="/alertas" color="danger">Alertas</ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
@@ -23,7 +26,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButtons, IonButton } from '@ionic/vue';
 import { productoService } from '../services/producto.service';
 import type { Producto } from '../types/inventario';
 

@@ -49,3 +49,13 @@ export interface Lote {
   costo_unitario: string;
   fecha_entrada: string;
 }
+
+export interface Movimiento {
+  id: number;
+  variante_id: number;
+  lote_id: number;
+  tipo: string;
+  cantidad: number;
+  costo_unitario: string;
+  fecha: string;
+}

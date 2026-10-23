@@ -21,6 +21,7 @@
 
       <ion-button expand="block" @click="vender">Vender</ion-button>
       <ion-button expand="block" fill="outline" :router-link="'/entrada/' + varianteId">Registrar compra</ion-button>
+      <ion-button expand="block" fill="clear" :router-link="'/movimientos/' + varianteId">Ver movimientos</ion-button>
 
       <p v-if="error" class="error">{{ error }}</p>
 

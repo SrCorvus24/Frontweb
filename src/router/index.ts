@@ -5,6 +5,8 @@ import ProductosPage from '../views/ProductosPage.vue';
 import DetallePage from '../views/DetallePage.vue';
 import VentaPage from '../views/VentaPage.vue';
 import EntradaPage from '../views/EntradaPage.vue';
+import MovimientosPage from '../views/MovimientosPage.vue';
+import AlertasPage from '../views/AlertasPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/', redirect: '/productos' },
@@ -13,6 +15,8 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/productos/:id', name: 'Detalle', component: DetallePage },
   { path: '/venta/:varianteId', name: 'Venta', component: VentaPage },
   { path: '/entrada/:varianteId', name: 'Entrada', component: EntradaPage },
+  { path: '/movimientos/:varianteId', name: 'Movimientos', component: MovimientosPage },
+  { path: '/alertas', name: 'Alertas', component: AlertasPage },
 ];
 
 const router = createRouter({
