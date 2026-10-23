@@ -14,7 +14,7 @@
       <p v-if="error">{{ error }}</p>
 
       <ion-list>
-        <ion-item v-for="t in tallas" :key="t.id">
+        <ion-item v-for="t in tallas" :key="t.id" :router-link="'/venta/' + t.id" button>
           <ion-label>
             <h2>Talla {{ t.talla }} · {{ t.sku }}</h2>
             <p>Stock: {{ t.stock }} und · Punto de reorden: {{ t.reorden.punto_reorden }} und</p>
@@ -29,13 +29,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonBadge, IonButtons, IonBackButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonBadge, IonButtons, IonBackButton, onIonViewWillEnter } from '@ionic/vue';
 import { varianteService } from '../services/variante.service';
 import type { Variante, Reorden } from '../types/inventario';
 
-// Una talla junto con su cálculo de reorden
+// una talla junto con su cálculo de reorden
 interface TallaConReorden extends Variante {
   reorden: Reorden;
 }
@@ -45,20 +45,24 @@ const tallas = ref<TallaConReorden[]>([]);
 const cargando = ref(true);
 const error = ref('');
 
-onMounted(async () => {
+// cada vez que entro a esta pantalla, vuelvo a cargar las tallas
+onIonViewWillEnter(async () => {
+  tallas.value = [];
+  cargando.value = true;
+
   try {
     const productoId = Number(route.params.id);
     const variantes = await varianteService.listarPorProducto(productoId);
 
-    // Por cada talla, pedirle al motor de reorden su cálculo
+    // por cada talla, le pido al motor de reorden su cálculo
     for (const v of variantes) {
       const reorden = await varianteService.reorden(v.id);
       tallas.value.push({ ...v, reorden });
     }
   } catch {
     error.value = 'No se pudo cargar la información';
-  } finally {
-    cargando.value = false;
   }
+
+  cargando.value = false;
 });
 </script>

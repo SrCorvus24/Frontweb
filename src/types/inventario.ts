@@ -18,9 +18,25 @@ export interface Variante {
 
 export interface Reorden {
   variante_id: number;
+  prenda: string;
+  talla: string;
+  sku: string;
   stock_actual: number;
   ventas_por_dia: number;
   stock_seguridad: number;
   punto_reorden: number;
   necesita_reorden: boolean;
+}
+
+export interface SalidaDetalle {
+  lote_id: number;
+  cantidad: number;
+  costo_unitario: number;
+}
+
+export interface Salida {
+  variante_id: number;
+  cantidad: number;
+  costo_total: number;
+  detalle: SalidaDetalle[];
 }
