@@ -40,3 +40,12 @@ export interface Salida {
   costo_total: number;
   detalle: SalidaDetalle[];
 }
+
+export interface Lote {
+  id: number;
+  variante_id: number;
+  cantidad_inicial: number;
+  cantidad_disponible: number;
+  costo_unitario: string;
+  fecha_entrada: string;
+}

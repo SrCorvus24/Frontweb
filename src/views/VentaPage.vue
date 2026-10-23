@@ -20,6 +20,7 @@
       </ion-item>
 
       <ion-button expand="block" @click="vender">Vender</ion-button>
+      <ion-button expand="block" fill="outline" :router-link="'/entrada/' + varianteId">Registrar compra</ion-button>
 
       <p v-if="error" class="error">{{ error }}</p>
 
@@ -37,10 +38,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonItem, IonInput, IonButton, IonList, IonLabel } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonItem, IonInput, IonButton, IonList, IonLabel, onIonViewWillEnter } from '@ionic/vue';
 import { varianteService } from '../services/variante.service';
 import { salidaService } from '../services/salida.service';
 import type { Reorden, Salida } from '../types/inventario';
@@ -85,7 +86,8 @@ async function vender() {
   }
 }
 
-onMounted(cargarInfo);
+// cada vez que entro a esta pantalla, actualizo el stock
+onIonViewWillEnter(cargarInfo);
 </script>
 
 <style scoped>
