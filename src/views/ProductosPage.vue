@@ -2,7 +2,20 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Productos</ion-title>
+        <ion-title>
+          <div class="marca">
+            <!-- logo de DrStock: cuadro blanco, cruz negra y centro rojo -->
+            <svg width="28" height="28" viewBox="0 0 48 48">
+              <rect width="48" height="48" rx="11" fill="#FFFFFF" />
+              <rect x="19" y="7" width="10" height="10" rx="2" fill="#111111" />
+              <rect x="7" y="19" width="10" height="10" rx="2" fill="#111111" />
+              <rect x="31" y="19" width="10" height="10" rx="2" fill="#111111" />
+              <rect x="19" y="31" width="10" height="10" rx="2" fill="#111111" />
+              <rect x="19" y="19" width="10" height="10" rx="2" fill="#C8102E" />
+            </svg>
+            <span><span class="dr">Dr</span><strong>Stock</strong></span>
+          </div>
+        </ion-title>
         <ion-buttons slot="end">
           <ion-button router-link="/alertas" color="danger">Alertas</ion-button>
         </ion-buttons>
@@ -41,3 +54,16 @@ onMounted(async () => {
   }
 });
 </script>
+
+<style scoped>
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dr {
+  font-weight: 400;
+  color: #A3A3A3;
+}
+</style>
