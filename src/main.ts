@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia';
 import App from './App.vue'
 import router from './router';
 
@@ -36,6 +37,7 @@ import './theme/variables.css';
 
 const app = createApp(App)
   .use(IonicVue)
+  .use(createPinia()) // Pinia va antes del router, porque el router usa la sesión
   .use(router);
 
 router.isReady().then(() => {

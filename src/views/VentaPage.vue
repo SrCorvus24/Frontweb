@@ -15,12 +15,17 @@
         <p>SKU {{ info.sku }} · Disponible: {{ info.stock_actual }} und</p>
       </div>
 
-      <ion-item>
-        <ion-input v-model="cantidad" type="number" label="Cantidad" label-placement="stacked"></ion-input>
-      </ion-item>
+      <!-- solo el administrador y el almacenista pueden vender o comprar -->
+      <div v-if="puedeEditar">
+        <ion-item>
+          <ion-input v-model="cantidad" type="number" label="Cantidad" label-placement="stacked"></ion-input>
+        </ion-item>
 
-      <ion-button expand="block" @click="vender">Vender</ion-button>
-      <ion-button expand="block" fill="outline" :router-link="'/entrada/' + varianteId">Registrar compra</ion-button>
+        <ion-button expand="block" @click="vender">Vender</ion-button>
+        <ion-button expand="block" fill="outline" :router-link="'/entrada/' + varianteId">Registrar compra</ion-button>
+      </div>
+      <p v-else class="aviso">Tu rol es de consulta: puedes ver el inventario, pero no vender ni comprar.</p>
+
       <ion-button expand="block" fill="clear" :router-link="'/movimientos/' + varianteId">Ver movimientos</ion-button>
 
       <p v-if="error" class="error">{{ error }}</p>
@@ -39,13 +44,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonItem, IonInput, IonButton, IonList, IonLabel, onIonViewWillEnter } from '@ionic/vue';
 import { varianteService } from '../services/variante.service';
 import { salidaService } from '../services/salida.service';
 import type { Reorden, Salida } from '../types/inventario';
+import { useAuthStore } from '../stores/auth';
+
+const auth = useAuthStore();
+const puedeEditar = computed(() => auth.tieneRol('ADMINISTRADOR', 'ALMACENISTA'));
 
 const route = useRoute();
 const varianteId = Number(route.params.varianteId);
@@ -94,5 +103,9 @@ onIonViewWillEnter(cargarInfo);
 <style scoped>
 .error {
   color: var(--ion-color-danger);
+}
+
+.aviso {
+  color: #5C5C5C;
 }
 </style>

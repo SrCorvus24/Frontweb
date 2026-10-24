@@ -18,11 +18,15 @@
         </ion-title>
         <ion-buttons slot="end">
           <ion-button router-link="/alertas" color="danger">Alertas</ion-button>
+          <ion-button @click="salir">Salir</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
     <ion-content>
+      <p v-if="auth.usuario" class="saludo">
+        Hola, {{ auth.usuario.name }} · <strong>{{ auth.usuario.rol }}</strong>
+      </p>
       <p v-if="error">{{ error }}</p>
 
       <ion-list>
@@ -39,12 +43,22 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButtons, IonButton } from '@ionic/vue';
 import { productoService } from '../services/producto.service';
 import type { Producto } from '../types/inventario';
+import { useAuthStore } from '../stores/auth';
+
+const auth = useAuthStore();
+const router = useRouter();
 
 const productos = ref<Producto[]>([]);
 const error = ref('');
+
+async function salir() {
+  await auth.logout();
+  router.replace('/login');
+}
 
 onMounted(async () => {
   try {
@@ -60,6 +74,12 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.saludo {
+  margin: 16px 16px 0;
+  font-size: 14px;
+  color: #5C5C5C;
 }
 
 .dr {
