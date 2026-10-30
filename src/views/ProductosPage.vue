@@ -29,6 +29,18 @@
       </p>
       <p v-if="error">{{ error }}</p>
 
+      <!-- tarjetas de resumen, como en el Panel del mockup -->
+      <div class="resumen">
+        <div class="tarjeta">
+          <span class="etiqueta">Prendas</span>
+          <span class="numero">{{ productos.length }}</span>
+        </div>
+        <div class="tarjeta alerta" @click="router.push('/alertas')">
+          <span class="etiqueta">Tallas por pedir</span>
+          <span class="numero">{{ porPedir }}</span>
+        </div>
+      </div>
+
       <ion-list>
         <ion-item v-for="p in productos" :key="p.id" :router-link="'/productos/' + p.id" button>
           <ion-label>
@@ -42,10 +54,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButtons, IonButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButtons, IonButton, onIonViewWillEnter } from '@ionic/vue';
 import { productoService } from '../services/producto.service';
+import { varianteService } from '../services/variante.service';
 import type { Producto } from '../types/inventario';
 import { useAuthStore } from '../stores/auth';
 
@@ -53,6 +66,7 @@ const auth = useAuthStore();
 const router = useRouter();
 
 const productos = ref<Producto[]>([]);
+const porPedir = ref(0);
 const error = ref('');
 
 async function salir() {
@@ -60,9 +74,12 @@ async function salir() {
   router.replace('/login');
 }
 
-onMounted(async () => {
+// cada vez que entro, traigo las prendas y cuento cuántas tallas hay que pedir
+onIonViewWillEnter(async () => {
   try {
     productos.value = await productoService.listar();
+    const alertas = await varianteService.alertas();
+    porPedir.value = alertas.length;
   } catch {
     error.value = 'No se pudo conectar con el backend';
   }
@@ -74,6 +91,44 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.resumen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px;
+}
+
+.tarjeta {
+  background: #FFFFFF;
+  border: 1px solid #E2E2E2;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.etiqueta {
+  font-size: 13px;
+  color: #5C5C5C;
+}
+
+.numero {
+  font-size: 26px;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* la tarjeta de alertas va con borde y número en rojo */
+.alerta {
+  border-color: #C8102E;
+  cursor: pointer;
+}
+
+.alerta .numero {
+  color: #C8102E;
 }
 
 .saludo {

@@ -5,7 +5,7 @@
         <ion-buttons slot="start">
           <ion-back-button default-href="/productos"></ion-back-button>
         </ion-buttons>
-        <ion-title>Tallas</ion-title>
+        <ion-title>{{ titulo }}</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonBadge, IonButtons, IonBackButton, onIonViewWillEnter } from '@ionic/vue';
 import { varianteService } from '../services/variante.service';
@@ -44,6 +44,9 @@ const route = useRoute();
 const tallas = ref<TallaConReorden[]>([]);
 const cargando = ref(true);
 const error = ref('');
+
+// el nombre de la prenda viene en el cálculo de reorden de cualquier talla
+const titulo = computed(() => (tallas.value.length > 0 ? tallas.value[0].reorden.prenda : 'Tallas'));
 
 // cada vez que entro a esta pantalla, vuelvo a cargar las tallas
 onIonViewWillEnter(async () => {
