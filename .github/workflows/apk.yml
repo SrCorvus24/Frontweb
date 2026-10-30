@@ -1,0 +1,56 @@
+# Genera el APK de DrStock en los servidores de GitHub (sin instalar Android Studio)
+# Se corre solo cuando subo algo a main, o a mano desde la pestaña "Actions"
+name: Generar APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Bajar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar Java (lo necesita Android)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Instalar librerías
+        run: |
+          npm install --legacy-peer-deps
+          npm install @capacitor/android@8.5.3 --no-save --legacy-peer-deps
+
+      - name: Armar la app web apuntando a la API del VPS
+        run: npx vite build
+        env:
+          VITE_API_URL: http://134.209.215.41:3000/api
+
+      - name: Crear el proyecto Android
+        run: |
+          npx cap add android
+          npx cap sync android
+          # permito conexiones http (mi VPS no tiene https)
+          sed -i 's/<application/<application android:usesCleartextTraffic="true"/' android/app/src/main/AndroidManifest.xml
+
+      - name: Compilar el APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Guardar el APK para descargarlo
+        uses: actions/upload-artifact@v4
+        with:
+          name: DrStock-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
