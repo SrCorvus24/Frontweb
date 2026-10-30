@@ -1,0 +1,39 @@
+/* Colores de DrStock: blanco, negro y gris, rojo solo para alertas */
+:root {
+  /* letra de toda la app */
+  --ion-font-family: 'IBM Plex Sans', sans-serif;
+
+  /* fondo, texto y bordes */
+  --ion-background-color: #F6F6F6;
+  --ion-text-color: #1A1A1A;
+  --ion-item-background: #FFFFFF;
+  --ion-border-color: #E2E2E2;
+
+  /* barra de arriba */
+  --ion-toolbar-background: #111111;
+  --ion-toolbar-color: #FFFFFF;
+
+  /* color principal (botones): negro */
+  --ion-color-primary: #111111;
+  --ion-color-primary-rgb: 17, 17, 17;
+  --ion-color-primary-contrast: #FFFFFF;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #000000;
+  --ion-color-primary-tint: #2A2A2A;
+
+  /* rojo de alertas */
+  --ion-color-danger: #C8102E;
+  --ion-color-danger-rgb: 200, 16, 46;
+  --ion-color-danger-contrast: #FFFFFF;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #B00E28;
+  --ion-color-danger-tint: #CE2843;
+
+  /* gris de "Al día" */
+  --ion-color-medium: #5C5C5C;
+  --ion-color-medium-rgb: 92, 92, 92;
+  --ion-color-medium-contrast: #FFFFFF;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #515151;
+  --ion-color-medium-tint: #6C6C6C;
+}

@@ -1,0 +1,7 @@
+{
+  "name": "drstock",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
