@@ -41,8 +41,15 @@
         </div>
       </div>
 
+      <!-- buscador: filtra por nombre o categoria mientras escribo -->
+      <ion-searchbar v-model="busqueda" placeholder="Buscar prenda o categoria"></ion-searchbar>
+
+      <p v-if="busqueda && productosFiltrados.length === 0" class="vacio">
+        No hay prendas que coincidan con "{{ busqueda }}"
+      </p>
+
       <ion-list>
-        <ion-item v-for="p in productos" :key="p.id" :router-link="'/productos/' + p.id" button>
+        <ion-item v-for="p in productosFiltrados" :key="p.id" :router-link="'/productos/' + p.id" button>
           <ion-label>
             <h2>{{ p.nombre }}</h2>
             <p>{{ p.categoria }} · ${{ Number(p.precio).toLocaleString('es-CO') }}</p>
@@ -54,9 +61,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButtons, IonButton, onIonViewWillEnter } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButtons, IonButton, IonSearchbar, onIonViewWillEnter } from '@ionic/vue';
 import { productoService } from '../services/producto.service';
 import { varianteService } from '../services/variante.service';
 import type { Producto } from '../types/inventario';
@@ -68,6 +75,15 @@ const router = useRouter();
 const productos = ref<Producto[]>([]);
 const porPedir = ref(0);
 const error = ref('');
+const busqueda = ref('');
+
+// filtro la lista por nombre o categoria, sin importar mayusculas o minusculas
+const productosFiltrados = computed(() => {
+  const texto = busqueda.value.toLowerCase();
+  return productos.value.filter(
+    (p) => p.nombre.toLowerCase().includes(texto) || p.categoria.toLowerCase().includes(texto)
+  );
+});
 
 async function salir() {
   await auth.logout();
@@ -129,6 +145,12 @@ onIonViewWillEnter(async () => {
 
 .alerta .numero {
   color: #C8102E;
+}
+
+.vacio {
+  margin: 8px 16px;
+  font-size: 14px;
+  color: #5C5C5C;
 }
 
 .saludo {
