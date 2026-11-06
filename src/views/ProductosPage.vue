@@ -24,6 +24,11 @@
     </ion-header>
 
     <ion-content>
+      <!-- deslizo hacia abajo para recargar los datos -->
+      <ion-refresher slot="fixed" @ionRefresh="recargar">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+
       <p v-if="auth.usuario" class="saludo">
         Hola, {{ auth.usuario.name }} · <strong>{{ auth.usuario.rol }}</strong>
       </p>
@@ -63,7 +68,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButtons, IonButton, IonSearchbar, onIonViewWillEnter } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButtons, IonButton, IonSearchbar, IonRefresher, IonRefresherContent, onIonViewWillEnter } from '@ionic/vue';
+import type { RefresherCustomEvent } from '@ionic/vue';
 import { productoService } from '../services/producto.service';
 import { varianteService } from '../services/variante.service';
 import type { Producto } from '../types/inventario';
@@ -90,8 +96,9 @@ async function salir() {
   router.replace('/login');
 }
 
-// cada vez que entro, traigo las prendas y cuento cuántas tallas hay que pedir
-onIonViewWillEnter(async () => {
+// traigo las prendas y cuento cuántas tallas hay que pedir
+async function cargar() {
+  error.value = '';
   try {
     productos.value = await productoService.listar();
     const alertas = await varianteService.alertas();
@@ -99,7 +106,16 @@ onIonViewWillEnter(async () => {
   } catch {
     error.value = 'No se pudo conectar con el backend';
   }
-});
+}
+
+// cuando deslizo hacia abajo: recargo y le digo al refresher que ya terminó
+async function recargar(evento: RefresherCustomEvent) {
+  await cargar();
+  evento.target.complete();
+}
+
+// cada vez que entro a la pantalla, cargo los datos
+onIonViewWillEnter(cargar);
 </script>
 
 <style scoped>
