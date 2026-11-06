@@ -39,7 +39,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonItem, IonInput, IonButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonItem, IonInput, IonButton, toastController } from '@ionic/vue';
 import { varianteService } from '../services/variante.service';
 import { loteService } from '../services/lote.service';
 import type { Reorden, Lote } from '../types/inventario';
@@ -52,6 +52,17 @@ const cantidad = ref(10);
 const costo = ref(50000);
 const lote = ref<Lote | null>(null);
 const error = ref('');
+
+// mensaje corto abajo de la pantalla que se va solo a los 2 segundos
+async function avisar(mensaje: string) {
+  const toast = await toastController.create({
+    message: mensaje,
+    duration: 2000,
+    position: 'bottom',
+    color: 'dark',
+  });
+  await toast.present();
+}
 
 // traigo nombre, talla y stock de la talla
 async function cargarInfo() {
@@ -70,7 +81,9 @@ async function registrar() {
   }
 
   try {
-    lote.value = await loteService.registrar(varianteId, n, c);
+    const nuevo = await loteService.registrar(varianteId, n, c);
+    lote.value = nuevo;
+    avisar(`Compra registrada: lote #${nuevo.id}`);
     cargarInfo(); // vuelvo a pedir el stock para que se actualice
   } catch (err) {
     if (axios.isAxiosError(err) && err.response) {
