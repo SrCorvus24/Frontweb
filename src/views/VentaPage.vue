@@ -47,7 +47,7 @@
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonItem, IonInput, IonButton, IonList, IonLabel, onIonViewWillEnter } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonItem, IonInput, IonButton, IonList, IonLabel, onIonViewWillEnter, toastController } from '@ionic/vue';
 import { varianteService } from '../services/variante.service';
 import { salidaService } from '../services/salida.service';
 import type { Reorden, Salida } from '../types/inventario';
@@ -68,6 +68,17 @@ function formato(valor: number) {
   return valor.toLocaleString('es-CO');
 }
 
+// mensaje corto abajo de la pantalla que se va solo a los 2 segundos
+async function avisar(mensaje: string) {
+  const toast = await toastController.create({
+    message: mensaje,
+    duration: 2000,
+    position: 'bottom',
+    color: 'dark',
+  });
+  await toast.present();
+}
+
 // traigo nombre, talla y stock de la talla
 async function cargarInfo() {
   info.value = await varianteService.reorden(varianteId);
@@ -85,6 +96,7 @@ async function vender() {
 
   try {
     resultado.value = await salidaService.registrar(varianteId, n);
+    avisar(`Venta registrada: ${n} und`);
     cargarInfo(); // vuelvo a pedir el stock para que se actualice
   } catch (err) {
     // si el error viene del backend, muestro su mensaje (ej: "Solo hay 6 unidades")
