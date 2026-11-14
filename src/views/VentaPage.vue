@@ -21,12 +21,12 @@
           <ion-input v-model="cantidad" type="number" label="Cantidad" label-placement="stacked"></ion-input>
         </ion-item>
 
-        <ion-button expand="block" @click="vender">Vender</ion-button>
-        <ion-button expand="block" fill="outline" :router-link="'/entrada/' + varianteId">Registrar compra</ion-button>
+        <ion-button expand="block" @click="vender"><ion-icon :icon="cartOutline" slot="start"></ion-icon>Vender</ion-button>
+        <ion-button expand="block" fill="outline" :router-link="'/entrada/' + varianteId"><ion-icon :icon="addCircleOutline" slot="start"></ion-icon>Registrar compra</ion-button>
       </div>
       <p v-else class="aviso">Tu rol es de consulta: puedes ver el inventario, pero no vender ni comprar.</p>
 
-      <ion-button expand="block" fill="clear" :router-link="'/movimientos/' + varianteId">Ver movimientos</ion-button>
+      <ion-button expand="block" fill="clear" :router-link="'/movimientos/' + varianteId"><ion-icon :icon="listOutline" slot="start"></ion-icon>Ver movimientos</ion-button>
 
       <p v-if="error" class="error">{{ error }}</p>
 
@@ -47,7 +47,8 @@
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonItem, IonInput, IonButton, IonList, IonLabel, onIonViewWillEnter, toastController } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonItem, IonInput, IonButton, IonList, IonLabel, onIonViewWillEnter, toastController, IonIcon } from '@ionic/vue';
+import { cartOutline, addCircleOutline, listOutline } from 'ionicons/icons';
 import { varianteService } from '../services/variante.service';
 import { salidaService } from '../services/salida.service';
 import type { Reorden, Salida } from '../types/inventario';
