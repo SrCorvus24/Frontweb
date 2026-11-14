@@ -17,8 +17,8 @@
           </div>
         </ion-title>
         <ion-buttons slot="end">
-          <ion-button router-link="/alertas" color="danger">Alertas</ion-button>
-          <ion-button @click="salir">Salir</ion-button>
+          <ion-button router-link="/alertas" color="danger"><ion-icon :icon="warningOutline" slot="start"></ion-icon>Alertas</ion-button>
+          <ion-button @click="salir"><ion-icon :icon="logOutOutline" slot="start"></ion-icon>Salir</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -68,7 +68,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButtons, IonButton, IonSearchbar, IonRefresher, IonRefresherContent, onIonViewWillEnter } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, IonButtons, IonButton, IonSearchbar, IonRefresher, IonRefresherContent, onIonViewWillEnter, IonIcon } from '@ionic/vue';
+import { warningOutline, logOutOutline } from 'ionicons/icons';
 import type { RefresherCustomEvent } from '@ionic/vue';
 import { productoService } from '../services/producto.service';
 import { varianteService } from '../services/variante.service';
