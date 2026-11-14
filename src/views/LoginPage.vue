@@ -18,7 +18,10 @@
           <ion-input v-model="email" type="email" label="Correo" label-placement="stacked"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input v-model="password" type="password" label="Contraseña" label-placement="stacked"></ion-input>
+          <ion-input v-model="password" type="password" label="Contraseña" label-placement="stacked">
+            <!-- ojito para mostrar u ocultar la clave -->
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
         </ion-item>
 
         <ion-button expand="block" @click="entrar">Iniciar sesión</ion-button>
@@ -33,7 +36,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { IonPage, IonContent, IonItem, IonInput, IonButton } from '@ionic/vue';
+import { IonPage, IonContent, IonItem, IonInput, IonButton, IonInputPasswordToggle } from '@ionic/vue';
 import { useAuthStore } from '../stores/auth';
 
 const auth = useAuthStore();
